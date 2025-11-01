@@ -9,7 +9,7 @@ const port = process.env.port || 3000
 const cors = require('cors')
 
 app.use(cors({
-    origin:'http://localhost:5173'
+    origin:'*'
 }))
 app.get('/' , (req,res)=>{
     res.send('hellow ')
