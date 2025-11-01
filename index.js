@@ -31,8 +31,14 @@ const startServer = async ()=>{
         console.log('unabel to start the srevre ' , err)
         setTimeout(()=>{
             startServer()
-        })
+        },5000)
     }
 }
 
 startServer()
+
+setInterval(() => {
+  fetch('https://leogardbacken.onrender.com')
+    .then(res => console.log('Keep-alive ping:', res.status))
+    .catch(err => console.error('Ping failed:', err.message));
+}, 10 * 60 * 1000);
