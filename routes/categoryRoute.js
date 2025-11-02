@@ -12,6 +12,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/description", async (req, res) => {
+  try {
+    // Check if a type filter is provided in query
+    const { type } = req.query;
+
+    let filter = {};
+    if (type) {
+      filter.description = type; // Filter by description field (Section Based / Indication Based)
+    }
+
+    const categories = await Category.find(filter).sort({ createdAt: -1 });
+    res.json(categories);
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
+});
+
+
 // 🟢 Add a category
 router.post("/", async (req, res) => {
   try {
