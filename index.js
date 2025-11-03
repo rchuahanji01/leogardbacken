@@ -21,6 +21,7 @@ app.use('/api/leogaurd/register' , require('./routes/register'))
 app.use('/api/leogaurd/product' , require('./routes/productRoute'))
 app.use('/api/leogaurd/category' , require('./routes/categoryRoute'))
 app.use('/api/leogaurd/sendemail' , require('./routes/contactRoute'))
+console.log("<<<<<<<<<<<<<< route exicuted>>>>>>>>>>>>>>>>>>>>>")
 const startServer = async ()=>{
     try{
         app.listen(port , ()=>{
