@@ -152,14 +152,48 @@ router.get("/", async (req, res) => {
 //   }
 // });
 
+// router.get("/", async (req, res) => {
+//   try {
+//     const products = await Product.find();
+//     res.json(products);
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to fetch products" });
+//   }
+// });
+
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    // Extract page and limit from query parameters (with defaults)
+    let { page = 1, limit = 10 } = req.query;
+
+    // Convert to numbers to avoid string issues
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    // Calculate how many products to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch paginated products
+    const products = await Product.find()
+      .sort({ createdAt: -1 }) // optional: latest first
+      .skip(skip)
+      .limit(limit);
+
+    // Get total count for pagination info
+    const totalProducts = await Product.countDocuments();
+
+    res.json({
+      products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts,
+    });
   } catch (error) {
+    console.error("Error fetching paginated products:", error);
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
+
 
 // ✅ Update product
 router.put("/:id", upload.array("images", 5), async (req, res) => {
